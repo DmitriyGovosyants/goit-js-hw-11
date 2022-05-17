@@ -1,14 +1,11 @@
 class ImgsSearchApiService {
-    #BASE_URL;
-    #API_KEY;
-
     constructor() {
-        this.#BASE_URL = "https://pixabay.com/api/";
-        this.#API_KEY = "27444041-6ebfb7763dac999969343312e";
+        this.BASE_URL = "https://pixabay.com/api/";
+        this.API_KEY = "27444041-6ebfb7763dac999969343312e";
         this.page = 1;
         this.currentGalleryPoint = 0;
         this.searchParams = new URLSearchParams({
-            key: this.#API_KEY,
+            key: this.API_KEY,
             q: "",
             image_type: "photo",
             orientation: "horizontal",
@@ -19,7 +16,7 @@ class ImgsSearchApiService {
     }
 
     fetchImgs() {
-        return fetch(`${this.#BASE_URL}?${this.searchParams}`)
+        return fetch(`${this.BASE_URL}?${this.searchParams}`)
             .then(response => response.json())
             .then(data => {
                 this.checkGalleryPoint();
