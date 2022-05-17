@@ -1,58 +1,50 @@
 import './sass/main.scss';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { fetchImgs, searchParams } from './js/fetchImgs';
+import { noFindMessage, galleryEndMessage, totalImgMessage } from './js/notify-message';
+import { ImgsSearchApiService } from './js/search-imgs-api-service';
+import { getRefs } from './js/get-refs';
+import { renderGallery, resetGallery } from './js/render-gallery';
+import { loadMoreBtnHidden, loadMoreBtnVisible } from './js/load-more-btn';
 
-const refs = {
-    searchForm: document.querySelector('#search-form'),
-    gallery: document.querySelector('.gallery'),
-}
+const imgAPI = new ImgsSearchApiService();
+const refs = getRefs();
 
-refs.searchForm.addEventListener('submit', onClick);
+refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
+loadMoreBtnHidden();
 
-function onClick(e) {
+function onSearch(e) {
     e.preventDefault();
 
     const currentRequest = e.currentTarget.elements.searchQuery.value.trim();
-    searchParams.set('q', currentRequest);
-
-    fetchImgs()
+    loadMoreBtnHidden();
+    resetGallery();
+    imgAPI.resetPage();
+    imgAPI.setSearchParams(currentRequest);
+    
+    imgAPI.fetchImgs()
         .then(data => {
-            if (!data.total) {
-                return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+            if (data.total === 0) {
+                return noFindMessage();
             }
-            console.log(data.hits)
-            renderImgs(data);
-        })
+            renderGallery(data);
+            loadMoreBtnVisible();
+            totalImgMessage(data);
+            checkGalleryEndPoint(data);
+        });
 }
 
-function renderImgs({hits}) {
-    const imgsMarkup = hits
-        .map((el) => {
-            const { webformatURL, tags, likes, views, comments, downloads } = el;
-            return `
-                <div class="photo-card">
-                    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-                    <div class="info">
-                        <p class="info-item">
-                            <b>Likes</b>
-                            ${likes}
-                        </p>
-                        <p class="info-item">
-                            <b>Views</b>
-                            ${views}
-                        </p>
-                        <p class="info-item">
-                            <b>Comments</b>
-                            ${comments}
-                        </p>
-                        <p class="info-item">
-                            <b>Downloads</b>
-                            ${downloads}
-                        </p>
-                    </div>
-                </div>
-            `
-        })
-        .join('');
-    refs.gallery.innerHTML = imgsMarkup;
+function onLoadMore() {
+    loadMoreBtnHidden()
+    imgAPI.fetchImgs().then(data => {
+        renderGallery(data);
+        loadMoreBtnVisible();
+        checkGalleryEndPoint(data);
+    });
+}
+
+function checkGalleryEndPoint(data) {
+    if (imgAPI.currentGalleryPoint >= data.totalHits) {
+        galleryEndMessage();
+        loadMoreBtnHidden();
+    }
 }

@@ -1,3 +1,7 @@
+main {
+    padding-bottom: 40px;
+}
+
 img {
     display: block;
     max-width: 100%;
@@ -62,6 +66,6 @@ img {
     margin-top: 20px;
 }
 
-main {
-    padding-bottom: 40px;
+.is-hidden {
+    display: none;
 }
