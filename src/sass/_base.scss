@@ -1,0 +1,32 @@
+main {
+    padding-bottom: 40px;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: 60vw;
+    object-fit: cover;
+    margin: 0 auto;
+
+    @media screen and (min-width: 768px) {
+        height: 30vw;
+    }
+
+    @media screen and (min-width: 1280px) {
+        height: 17vw;
+    }
+}
+
+button {
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        background-color: burlywood;
+    }
+}
+
+.container {
+    padding: 20px;
+}
