@@ -4,9 +4,12 @@ import { ImgsSearchApiService } from './js/search-imgs-api-service';
 import { getRefs } from './js/get-refs';
 import { renderGallery, resetGallery } from './js/render-gallery';
 import { loadMoreBtnHidden, loadMoreBtnVisible } from './js/load-more-btn';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const imgAPI = new ImgsSearchApiService();
 const refs = getRefs();
+const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
 
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
@@ -30,15 +33,18 @@ function onSearch(e) {
             loadMoreBtnVisible();
             totalImgMessage(data);
             checkGalleryEndPoint(data);
+            lightbox.refresh();
         });
 }
 
 function onLoadMore() {
-    loadMoreBtnHidden()
+    loadMoreBtnHidden();
+
     imgAPI.fetchImgs().then(data => {
         renderGallery(data);
         loadMoreBtnVisible();
         checkGalleryEndPoint(data);
+        lightbox.refresh();
     });
 }
 

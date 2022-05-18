@@ -4,10 +4,10 @@ const refs = getRefs();
 function renderGallery({ hits }) {
     const imgsMarkup = hits
         .map((el) => {
-            const { webformatURL, tags, likes, views, comments, downloads } = el;
+            const { webformatURL, largeImageURL, tags, likes, views, comments, downloads } = el;
             return `
                 <div class="photo-card">
-                    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+                    <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
                     <div class="info">
                         <p class="info-item">
                             <b>Likes</b>
