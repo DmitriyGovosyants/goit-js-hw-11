@@ -1,3 +1,5 @@
+const axios = require('axios').default; 
+
 class ImgsSearchApiService {
     constructor() {
         this.BASE_URL = "https://pixabay.com/api/";
@@ -16,9 +18,8 @@ class ImgsSearchApiService {
     }
 
     fetchImgs() {
-        return fetch(`${this.BASE_URL}?${this.searchParams}`)
-            .then(response => response.json())
-            .then(data => {
+        return axios.get(`${this.BASE_URL}?${this.searchParams}`)
+            .then(({data}) => {
                 this.checkGalleryPoint();
                 this.incrementPage();
                 return data;
