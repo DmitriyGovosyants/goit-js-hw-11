@@ -4,6 +4,7 @@ import { ImgsSearchApiService } from './js/search-imgs-api-service';
 import { getRefs } from './js/get-refs';
 import { renderGallery, resetGallery } from './js/render-gallery';
 import { loadMoreBtnHidden, loadMoreBtnVisible } from './js/load-more-btn';
+import { smoothScroll } from './js/smooth-scroll';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -49,6 +50,7 @@ async function onLoadMore() {
         const data = await imgAPI.fetchImgs();
 
         renderGallery(data);
+        smoothScroll();
         checkGalleryEndPoint(data);
         lightbox.refresh();
     } catch (error) {
