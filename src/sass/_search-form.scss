@@ -8,16 +8,16 @@
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: aqua;
+}
 
-    & input {
-        margin-right: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
+.search-form input {
+    margin-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
-    & button {
-        border-radius: 10px;
-    }
+.search-form button {
+    border-radius: 10px;
 }
 
 .load-more {
@@ -27,8 +27,19 @@
     margin-top: 20px;
     padding: 10px;
     border-radius: 10px;
+    background-color: coral;
+    transition: all 500ms linear;
 
     &.is-hidden {
         display: none;
+    }
+
+    &:hover {
+        box-shadow: 5px 5px 5px black;
+        transform: translateY(-5px);
+    }
+
+    &::after {
+        content: " >>>";
     }
 }
