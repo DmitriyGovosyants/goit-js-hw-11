@@ -13,9 +13,10 @@ const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', caption
 
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
+
 loadMoreBtnHidden();
 
-function onSearch(e) {
+async function onSearch(e) {
     e.preventDefault();
 
     const currentRequest = e.currentTarget.elements.searchQuery.value.trim();
@@ -24,28 +25,37 @@ function onSearch(e) {
     imgAPI.resetPage();
     imgAPI.setSearchParams(currentRequest);
     
-    imgAPI.fetchImgs()
-        .then(data => {
-            if (data.total === 0) {
-                return noFindMessage();
-            }
-            renderGallery(data);
-            loadMoreBtnVisible();
-            totalImgMessage(data);
-            checkGalleryEndPoint(data);
-            lightbox.refresh();
-        });
-}
+    try {
+        const data = await imgAPI.fetchImgs();
 
-function onLoadMore() {
-    loadMoreBtnHidden();
+        if (data.total === 0) {
+            return noFindMessage();
+        }
 
-    imgAPI.fetchImgs().then(data => {
         renderGallery(data);
         loadMoreBtnVisible();
+        totalImgMessage(data);
         checkGalleryEndPoint(data);
         lightbox.refresh();
-    });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+async function onLoadMore() {
+    loadMoreBtnHidden();
+
+    try {
+        const data = await imgAPI.fetchImgs();
+
+        renderGallery(data);
+        checkGalleryEndPoint(data);
+        lightbox.refresh();
+    } catch (error) {
+        console.log(error.message);
+    }
+
+    loadMoreBtnVisible();
 }
 
 function checkGalleryEndPoint(data) {

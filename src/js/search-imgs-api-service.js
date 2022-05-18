@@ -17,13 +17,11 @@ class ImgsSearchApiService {
         });
     }
 
-    fetchImgs() {
-        return axios.get(`${this.BASE_URL}?${this.searchParams}`)
-            .then(({data}) => {
-                this.checkGalleryPoint();
-                this.incrementPage();
-                return data;
-            })
+    async fetchImgs() {
+        const { data } = await axios.get(`${this.BASE_URL}?${this.searchParams}`);
+        this.updateCurrentGalleryPoint();
+        this.incrementPage();
+        return data;
     }
 
     incrementPage() {
@@ -40,7 +38,7 @@ class ImgsSearchApiService {
         this.searchParams.set('q', params);
     }
 
-    checkGalleryPoint() {
+    updateCurrentGalleryPoint() {
         this.currentGalleryPoint = this.page * this.searchParams.get('per_page');
     }
 }
