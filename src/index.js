@@ -2,9 +2,9 @@ import './sass/main.scss';
 import { noFindMessage, galleryEndMessage, totalImgMessage } from './js/notify-message';
 import { ImgsSearchApiService } from './js/search-imgs-api-service';
 import { getRefs } from './js/get-refs';
-import { renderGallery, resetGallery } from './js/render-gallery';
 import { loadMoreBtnHidden, loadMoreBtnVisible } from './js/load-more-btn';
 import { smoothScroll } from './js/smooth-scroll';
+import galleryMarkup from './template/gallery.hbs';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -65,4 +65,12 @@ function checkGalleryEndPoint(data) {
         galleryEndMessage();
         loadMoreBtnHidden();
     }
+}
+
+function renderGallery({ hits }) {
+    refs.gallery.insertAdjacentHTML('beforeend', galleryMarkup(hits));
+}
+
+function resetGallery() {
+    refs.gallery.innerHTML = "";
 }
